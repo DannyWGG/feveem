@@ -1,0 +1,1 @@
+from apps.personal.admin.docente import DocenteAdmin
