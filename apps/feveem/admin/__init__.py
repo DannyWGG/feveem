@@ -1,0 +1,1 @@
+from apps.feveem.admin.asistente import AsistenteAdmin

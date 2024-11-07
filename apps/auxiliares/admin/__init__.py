@@ -1,0 +1,2 @@
+from apps.auxiliares.admin.voceria import VoceriaAdmin
+from apps.auxiliares.admin.actividadExtracurricular import ActividadExtraCurricular 
