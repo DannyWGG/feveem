@@ -3,8 +3,8 @@ from ninja.errors                   import HttpError
 from apps.feveem.models.asistente   import Asistente
 from typing                         import List
 from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut
-from configuracion.schemes      import ErrorSchema
-from configuracion.schemes      import SucessSchema
+from configuracion.schemes          import ErrorSchema
+from configuracion.schemes          import SucessSchema
 
 tag = ['asistentes']
 router = Router()
@@ -13,6 +13,20 @@ router = Router()
 @router.get("/ver", tags=tag, response=List[AsistenteSchemaOut])
 def listar_asistentes(request):
     return Asistente.objects.all()
+
+@router.get("/buscar", tags=tag, response=AsistenteSchemaOut)
+
+def buscar_asistente(request, origen: str, cedula: int):
+    """
+    description="Busca un asistente específico por su origen y cédula. "
+                "Si el asistente no se encuentra, se lanza un error 404.",
+
+    """    
+    try:
+        asistente = Asistente.objects.get(origen=origen, cedula=cedula)
+        return asistente
+    except Asistente.DoesNotExist:
+        raise HttpError(404, "Asistente no encontrado")
 
 ## Endpoint para obtener un área de personal específico por su ID
 #@router.get("/listar/{area_id}", tags=tag, response=AreaPersonalSchema)

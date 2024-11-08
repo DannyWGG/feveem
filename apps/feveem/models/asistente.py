@@ -41,6 +41,7 @@ class Asistente(models.Model):
         db_table            = 'feveem\".\"asistente'
         verbose_name        = 'Asistente'
         verbose_name_plural = 'Asistentes'
+        unique_together     = ('cedula', 'origen',)
         
     def __str__(self):
         return f'{self.primer_nombre} {self.primer_apellido}'
