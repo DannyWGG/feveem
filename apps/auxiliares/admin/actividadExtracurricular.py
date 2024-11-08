@@ -6,10 +6,10 @@ class ActividadExtraCurricularAdmin(admin.ModelAdmin):
 
     # Accesos directos del lado derecho
     def editar(self, obj):
-        return format_html('<a class="btn" href="/admin/auxiliares/actividadExtracurricular/{}/change/"><i class="nav-icon fas fa-edit"></i></a>', obj.id)
+        return format_html('<a class="btn" href="/admin/auxiliares/actividadextracurricular/{}/change/"><i class="nav-icon fas fa-edit"></i></a>', obj.id)
     
     def eliminar(self, obj):
-        return format_html('<a class="btn" href="/admin/auxiliares/actividadExtracurricular/{}/delete/"><i class="nav-icon fas fa-trash"></i></a>', obj.id)
+        return format_html('<a class="btn" href="/admin/auxiliares/actividadextracurricular/{}/delete/"><i class="nav-icon fas fa-trash"></i></a>', obj.id)
 
     
     list_display        =   ('descripcion', 'editar', 'eliminar')
