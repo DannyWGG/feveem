@@ -16,8 +16,15 @@ router = Router()
 def listar_asistentes(request):
     return Asistente.objects.all()
 
-@router.get("/buscar", tags=tag, response=AsistenteSchemaOut, auth=JWTAuth())
 
+# Endpoint para listar todos los asistente
+@router.get('/filtro/{usuario_id}', tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())
+def filtro(request, usuario_id:int ):
+    usuario = Asistente.objects.filter(usuario_id=usuario_id)
+    return usuario
+
+
+@router.get("/buscar", tags=tag, response=AsistenteSchemaOut, auth=JWTAuth())
 def buscar_asistente(request, origen: str, cedula: int):
     """
     description="Busca un asistente específico por su origen y cédula. "

@@ -2,6 +2,7 @@ from django.db import models
 from apps.cuenta.models import User
 from apps.auxiliares.models.Voceria import Voceria
 from apps.auxiliares.models.ExtraCurricular import ActividadExtraCurricular
+from apps.cuenta.models import User
 
 class Asistente(models.Model):
     V    =   'V'
@@ -31,6 +32,7 @@ class Asistente(models.Model):
     usuario_tiktok = models.CharField(max_length=100, blank=True, null=True)
     extra_curricular = models.ForeignKey(ActividadExtraCurricular, on_delete=models.PROTECT)
     identificador = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs): 
         self.identificador = self.origen + str(self.cedula)
