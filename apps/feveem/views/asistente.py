@@ -6,15 +6,17 @@ from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut
 from configuracion.schemes          import ErrorSchema
 from configuracion.schemes          import SucessSchema
 
+from ninja_jwt.authentication       import JWTAuth
+
 tag = ['asistentes']
 router = Router()
 
 # Endpoint para listar todas las áreas de personal
-@router.get("/ver", tags=tag, response=List[AsistenteSchemaOut])
+@router.get("/ver", tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())
 def listar_asistentes(request):
     return Asistente.objects.all()
 
-@router.get("/buscar", tags=tag, response=AsistenteSchemaOut)
+@router.get("/buscar", tags=tag, response=AsistenteSchemaOut, auth=JWTAuth())
 
 def buscar_asistente(request, origen: str, cedula: int):
     """
@@ -38,7 +40,7 @@ def buscar_asistente(request, origen: str, cedula: int):
 #        raise HttpError(404, "Área personal no encontrada")
 
 # Endpoint para crear un área de personal
-@router.post("/crear", tags=tag, response=AsistenteSchemaIn)
+@router.post("/crear", tags=tag, response=AsistenteSchemaIn, auth=JWTAuth())
 def crear_asistente(request, data: AsistenteSchemaIn):
     asistente = Asistente.objects.create(**data.dict())
     return asistente
