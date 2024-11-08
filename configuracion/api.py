@@ -6,6 +6,9 @@ from datetime                               import datetime
 
 from apps.cuenta.views.token                    import router as token_router
 
+from apps.feveem.views.asistente import router as asistente
+
+
 api = NinjaExtraAPI(
                         title           = "Plantilla",
                         description     = "API para Plantillas",
@@ -14,7 +17,9 @@ api = NinjaExtraAPI(
 
 
 
-api.add_router("/auth/",                token_router)
+api.add_router("/auth/", token_router)
+api.add_router("/asistente/", asistente)
+
 
 api.register_controllers(ResetPasswordController)
 api.register_controllers(MyTokenObtainPairController)
