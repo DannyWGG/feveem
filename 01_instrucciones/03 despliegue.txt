@@ -13,22 +13,22 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 ## INSTALACION DE .SERVICE Y .SOCKET
-sudo cp censoestudiantil.service censoestudiantil.socket /etc/systemd/system
+sudo cp feveem.service feveem.socket /etc/systemd/system
 
 ## HABILITAR .SERVICE
-sudo systemctl enable censoestudiantil.service
+sudo systemctl enable feveem.service
 
 ## INICIAR .SOCKET
-sudo systemctl start censoestudiantil.socket
+sudo systemctl start feveem.socket
 
 ## COMPROBAR SOCKET
-file /run/censoestudiantil.sock
+file /run/feveem.sock
 
 ## INSTALAR BLOQUE DE NGINX
-sudo cp censoestudiantil.conf /etc/nginx/sites-available/
+sudo cp feveem.conf /etc/nginx/sites-available/
 
 ## CREAR ENLACE SIMBOLICO
-sudo ln -s /etc/nginx/sites-available/censoestudiantil.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/feveem.conf /etc/nginx/sites-enabled/
 
 ## REINICIAR NGINX
 /etc/init.d/nginx restart

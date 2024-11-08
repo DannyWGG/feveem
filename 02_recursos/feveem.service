@@ -1,16 +1,16 @@
 [Unit]
 Description=Servicio de la API de Censo Estudiantil
-Requires=censoestudiantil.socket
+Requires=feveem.socket
 After=network.target
 
 [Service]
 User=usuario
 Group=www-data
-WorkingDirectory=/var/www/html/censo_estudiantil
-ExecStart=/var/www/html/censo_estudiantil/.venv/bin/gunicorn \
+WorkingDirectory=/var/www/html/feveem
+ExecStart=/var/www/html/feveem/.venv/bin/gunicorn \
         --access-logfile - \
         --workers 3 \
-        --bind unix:/run/censoestudiantil.sock \
+        --bind unix:/run/feveem.sock \
         configuracion.wsgi:application
 
 [Install]
