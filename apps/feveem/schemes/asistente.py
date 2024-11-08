@@ -24,6 +24,7 @@ class AsistenteSchemaIn(Schema):
     usuario_tiktok: Optional[str]
     extra_curricular_id: int
     identificador: str
+    usuario_id: int
 
 class AsistenteSchemaOut(Schema):
     
@@ -47,3 +48,4 @@ class AsistenteSchemaOut(Schema):
     usuario_tiktok: Optional[str]
     extra_curricular_id: int
     identificador: str
+    usuario_id: int
