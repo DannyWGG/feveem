@@ -7,6 +7,8 @@ from datetime                               import datetime
 from apps.cuenta.views.token                    import router as token_router
 
 from apps.feveem.views.asistente import router as asistente
+from apps.auxiliares.views.Voceria import router as Voceria
+from apps.auxiliares.views.ExtraCurricular import router as ExtraCurricular
 
 
 api = NinjaExtraAPI(
@@ -19,7 +21,8 @@ api = NinjaExtraAPI(
 
 api.add_router("/auth/", token_router)
 api.add_router("/asistente/", asistente)
-
+api.add_router("/voceria/", Voceria)
+api.add_router("/extracurricular/", ExtraCurricular)
 
 api.register_controllers(ResetPasswordController)
 api.register_controllers(MyTokenObtainPairController)
