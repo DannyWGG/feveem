@@ -2,7 +2,7 @@
 Description=Socket de la API de Censo Estudiantil
 
 [Socket]
-ListenStream=/run/censoestudiantil.sock
+ListenStream=/run/feveem.sock
 
 [Install]
 WantedBy=sockets.target
