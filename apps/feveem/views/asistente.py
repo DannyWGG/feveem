@@ -3,16 +3,32 @@ from ninja.errors                   import HttpError
 from apps.feveem.models.asistente   import Asistente
 from typing                         import List
 from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut
-from configuracion.schemes      import ErrorSchema
-from configuracion.schemes      import SucessSchema
+from configuracion.schemes          import ErrorSchema
+from configuracion.schemes          import SucessSchema
+
+from ninja_jwt.authentication       import JWTAuth
 
 tag = ['asistentes']
 router = Router()
 
 # Endpoint para listar todas las áreas de personal
-@router.get("/ver", tags=tag, response=List[AsistenteSchemaOut])
+@router.get("/ver", tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())
 def listar_asistentes(request):
     return Asistente.objects.all()
+
+@router.get("/buscar", tags=tag, response=AsistenteSchemaOut, auth=JWTAuth())
+
+def buscar_asistente(request, origen: str, cedula: int):
+    """
+    description="Busca un asistente específico por su origen y cédula. "
+                "Si el asistente no se encuentra, se lanza un error 404.",
+
+    """    
+    try:
+        asistente = Asistente.objects.get(origen=origen, cedula=cedula)
+        return asistente
+    except Asistente.DoesNotExist:
+        raise HttpError(404, "Asistente no encontrado")
 
 ## Endpoint para obtener un área de personal específico por su ID
 #@router.get("/listar/{area_id}", tags=tag, response=AreaPersonalSchema)
@@ -24,7 +40,7 @@ def listar_asistentes(request):
 #        raise HttpError(404, "Área personal no encontrada")
 
 # Endpoint para crear un área de personal
-@router.post("/crear", tags=tag, response=AsistenteSchemaIn)
+@router.post("/crear", tags=tag, response=AsistenteSchemaIn, auth=JWTAuth())
 def crear_asistente(request, data: AsistenteSchemaIn):
     asistente = Asistente.objects.create(**data.dict())
     return asistente

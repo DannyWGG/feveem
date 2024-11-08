@@ -30,7 +30,7 @@ class Asistente(models.Model):
     usuario_instagram = models.CharField(max_length=100, blank=True, null=True)
     usuario_tiktok = models.CharField(max_length=100, blank=True, null=True)
     extra_curricular = models.ForeignKey(ActividadExtraCurricular, on_delete=models.PROTECT)
-    identificador = models.CharField(max_length=100, unique=True)
+    identificador = models.CharField(max_length=100, unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs): 
         self.identificador = self.origen + str(self.cedula)
@@ -39,8 +39,9 @@ class Asistente(models.Model):
     class Meta:
         managed             = True
         db_table            = 'feveem\".\"asistente'
-        verbose_name        = 'Asistente'
-        verbose_name_plural = 'Asistentes'
+        verbose_name        = 'Vocero'
+        verbose_name_plural = 'Voceros'
+        unique_together     = ('cedula', 'origen',)
         
     def __str__(self):
         return f'{self.primer_nombre} {self.primer_apellido}'
