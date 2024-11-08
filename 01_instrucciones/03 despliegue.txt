@@ -39,10 +39,10 @@ sudo nano /etc/hosts
 
 
 ## DESCARTAR ERRORES
-sudo systemctl status censoestudiantil.socket
-sudo systemctl status censoestudiantil.service
-sudo systemctl status censoestudiantil
+sudo systemctl status feveem.socket
+sudo systemctl status feveem.service
+sudo systemctl status feveem
 
 
 sudo systemctl daemon-reload
-sudo systemctl restart censoestudiantil
+sudo systemctl restart feveem
