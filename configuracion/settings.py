@@ -203,7 +203,7 @@ CELERY_TIMEZONE                 =   TIME_ZONE
 #NINJA_JWT                       = {'TOKEN_OBTAIN_PAIR_INPUT_SCHEMA': 'apps.cuenta.views.token.MyTokenObtainPairInputSchema',}
 # Configuracion del uso de JWT
 NINJA_JWT                       =   {
-                                        'ACCESS_TOKEN_LIFETIME':    timedelta(minutes=5),
+                                        'ACCESS_TOKEN_LIFETIME':    timedelta(hours=8),
                                         'REFRESH_TOKEN_LIFETIME':   timedelta(days=1),
                                         'ROTATE_REFRESH_TOKENS':    False,
                                         'BLACKLIST_AFTER_ROTATION': False,
