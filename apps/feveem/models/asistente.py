@@ -4,6 +4,12 @@ from apps.auxiliares.models.Voceria import Voceria
 from apps.auxiliares.models.ExtraCurricular import ActividadExtraCurricular
 from apps.cuenta.models import User
 
+import os
+import requests
+import json
+from decouple import config
+from requests.exceptions import RequestException
+
 class Asistente(models.Model):
     V    =   'V'
     E    =   'E'
@@ -19,7 +25,7 @@ class Asistente(models.Model):
     segundo_apellido = models.CharField(max_length=100, blank=True, null=True)
     origen = models.CharField(max_length=1)
     cedula = models.IntegerField()
-    fecha_nacimiento = models.CharField(max_length=10)
+    fecha_nacimiento = models.CharField(max_length=10, blank=True, null=True)
     cod_plantel = models.CharField(max_length=50)
     institucion_educativa = models.CharField(max_length=255)
     anio_curso = models.CharField(max_length=10)
@@ -34,9 +40,28 @@ class Asistente(models.Model):
     identificador = models.CharField(max_length=100, unique=True, blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
 
-    def save(self, *args, **kwargs): 
-        self.identificador = self.origen + str(self.cedula)
-        super(Asistente, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+
+        headers     = {'Content-Type': 'application/json'}
+
+        try:
+            response_data = requests.get(f"https://visitantes.me.gob.ve/saime/{self.origen}/{self.cedula}/", headers=headers, verify=False)
+            if response_data.status_code == 200:
+                
+                data = response_data.json()
+                self.identificador = self.origen + str(self.cedula)
+
+                self.primer_nombre = data.get('primer_nombre', '')
+                self.segundo_nombre = data.get('segundo_nombre', '')
+                self.primer_apellido = data.get('primer_apellido', '')
+                self.segundo_apellido = data.get('segundo_apellido', '')
+                self.fecha_nacimiento = data.get('fecha_nacimiento', '')
+
+                super(Asistente, self).save(*args, **kwargs)
+
+        except (ValueError, RequestException) as e:
+            print(f"Error al consultar de Saime: {str(e)}")
+            
 
     class Meta:
         managed             = True
