@@ -23,7 +23,7 @@ router = Router()
 #     return usuario
 
 
-@router.get("/buscar", tags=tag, response=PlantelSchemaOut, auth=JWTAuth())
+@router.get("/buscar", tags=tag, response=PlantelSchemaOut)
 def consultar_director(request, origen: str, cedula: int):
     """
     description="Busca un director específico por su origen y cédula. "
@@ -36,6 +36,8 @@ def consultar_director(request, origen: str, cedula: int):
         return plantelSchemaOut
     else:
         raise HttpError(404, "El director no existe")
+
+
 
 ## Endpoint para obtener un área de personal específico por su ID
 #@router.get("/listar/{area_id}", tags=tag, response=AreaPersonalSchema)
