@@ -28,7 +28,7 @@ def filtro(request, usuario_id:int ):
     return usuario
 
 
-@router.get("/buscar", tags=tag, response=AsistenteSchemaOut, auth=JWTAuth())
+@router.get("/buscar/{origen}/{cedula}", tags=tag, response=AsistenteSchemaOut, auth=JWTAuth())
 def buscar_asistente(request, origen: str, cedula: int):
     """
     description="Busca un asistente específico por su origen y cédula. "
