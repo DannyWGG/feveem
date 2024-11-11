@@ -11,7 +11,7 @@ class AsistenteSchemaIn(Schema):
     segundo_apellido: Optional[str]
     origen: str
     cedula: int
-    fecha_nacimiento: str
+    fecha_nacimiento: Optional[str]
     cod_plantel: str
     institucion_educativa: str
     anio_curso: str
@@ -35,7 +35,7 @@ class AsistenteSchemaOut(Schema):
     segundo_apellido: Optional[str]
     origen: str
     cedula: int
-    fecha_nacimiento: str
+    fecha_nacimiento: Optional[str]
     cod_plantel: str
     institucion_educativa: str
     anio_curso: str
