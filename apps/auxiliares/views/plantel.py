@@ -23,7 +23,7 @@ router = Router()
 #     return usuario
 
 
-@router.get("/buscar", tags=tag, response=PlantelSchemaOut)
+@router.get("/buscar/{origen}/{cedula}", tags=tag, response=PlantelSchemaOut)
 def consultar_director(request, origen: str, cedula: int):
     """
     description="Busca un director específico por su origen y cédula. "
@@ -37,6 +37,20 @@ def consultar_director(request, origen: str, cedula: int):
     else:
         raise HttpError(404, "El director no existe")
 
+
+@router.get("/consultar/{cod_plantel}", tags=tag, response=PlantelSchemaOut)
+def consultar_plantel(request, cod_plantel: str):
+    """
+    description="Busca un plantel específico por su codigo de plantel. "
+                "Si el plantel no se encuentra, se lanza un error 404.",
+    """    
+    planteles = Plantel.objects.filter(cod_plantel=cod_plantel)
+    if planteles.exists():
+        # Si hay más de un registro, puedes manejarlo según sea necesario (e.g., tomar el primero)
+        plantelSchemaOut = planteles.first()  # Devuelve el primer registro encontrado
+        return plantelSchemaOut
+    else:
+        raise HttpError(404, "El plantel no existe")
 
 
 ## Endpoint para obtener un área de personal específico por su ID

@@ -12,7 +12,9 @@ import os
 BASE_DIR            = Path(__file__).resolve().parent.parent
 SECRET_KEY          = config('SECRET_KEY')
 DEBUG               = config('DEBUG')
-ALLOWED_HOSTS     = config('ALLOWED_HOSTS', cast=Csv())
+# ALLOWED_HOSTS     = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS       = [] 
+
 BASE_APPS   =   [
                     'jazzmin',
                     'django.contrib.admin',
