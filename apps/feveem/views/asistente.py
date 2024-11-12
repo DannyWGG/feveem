@@ -15,11 +15,9 @@ router = Router()
 
 logger = logging.getLogger(__name__)
 
-# Endpoint para listar todas las áreas de personal
 @router.get("/ver", tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())
 def listar_asistentes(request):
-    return Asistente.objects.all()
-
+    return Asistente.objects.select_related('voceria', 'extra_curricular').all()
 
 # Endpoint para listar todos los asistente
 @router.get('/filtro/{usuario_id}', tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())

@@ -3,8 +3,17 @@ from ninja import Schema
 from typing import List, Optional
 
 
-class AsistenteSchemaIn(Schema):
+# Subesquemas
+class SubSchemaExtraCurricularSchemaOut(Schema):
+    descripcion: str
 
+class SubSchemaVoceriaSchemaOut(Schema):
+    id: int
+    descripcion: str
+    estatus: bool
+
+
+class AsistenteSchemaIn(Schema):
     primer_nombre: Optional[str]
     segundo_nombre: Optional[str]
     primer_apellido: Optional[str]
@@ -27,7 +36,6 @@ class AsistenteSchemaIn(Schema):
     usuario_id: int
 
 class AsistenteSchemaOut(Schema):
-    
     id: int
     primer_nombre: Optional[str]
     segundo_nombre: Optional[str]
@@ -39,13 +47,13 @@ class AsistenteSchemaOut(Schema):
     cod_plantel: str
     institucion_educativa: str
     anio_curso: str
-    voceria_id: int
+    voceria: Optional[SubSchemaVoceriaSchemaOut]
     municipio: Optional[str]
     estado: Optional[str]
     numero_telefono: Optional[str]
     correo: Optional[str]
     usuario_instagram: Optional[str]
     usuario_tiktok: Optional[str]
-    extra_curricular_id: int
+    extra_curricular: Optional[SubSchemaExtraCurricularSchemaOut]
     identificador: Optional[str]
     usuario_id: int
