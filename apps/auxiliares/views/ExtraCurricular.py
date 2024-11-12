@@ -15,11 +15,12 @@ router = Router()
 #    return ActividadExtraCurricular.objects.all()
 
 # Endpoint para listar todos los docentes con estatus true
-@router.get('/ver/', tags=tag, response=List[ExtraCurricularSchemaOut], auth=JWTAuth())
-def listar_docentes(request):
-    curricular = ActividadExtraCurricular.objects.filter(estatus=True)
-    return curricular
 
+# Endpoint para listar tlas actividades extracurriculares
+@router.get("/listar", tags=tag, response=List[ExtraCurricularSchemaOut], auth=JWTAuth())
+def listar_vocerias(request):
+    """  Endpoint para listar las actividades extracurriculares """
+    return ActividadExtraCurricular.objects.all()
 
 # Endpoint para obtener un docente específico por su ID
 @router.get("/filtro/{id}",  tags=tag, response=ExtraCurricularSchemaOut, auth=JWTAuth())

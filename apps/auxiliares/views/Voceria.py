@@ -11,22 +11,15 @@ from ninja_jwt.authentication import JWTAuth
 tag = ['Voceria']
 router = Router()
 
+
 # Endpoint para listar todas las áreas de personal
-@router.get('/ver/', tags=tag, response=List[VoceriaSchemaOut], auth=JWTAuth())
-def listar_docentes(request):
-    voceria = Voceria.objects.filter(estatus=True)
-    return voceria
+@router.get("/listar", tags=tag, response=List[VoceriaSchemaOut], auth=JWTAuth())
+def listar_vocerias(request):
+    """ Endpoint para listar los tipos de vocerias """
 
-# Endpoint para obtener un área de personal específico por su ID
-@router.get("/listar/{id}", tags=tag, response=VoceriaSchemaOut, auth=JWTAuth())
-def ver_area_personal(request, area_id: int):
-    try:
-        voceria = Voceria.objects.get(id=area_id)
-        return voceria
-    except Voceria.DoesNotExist:
-        raise HttpError(404, "Opción no encontrada")
+    return Voceria.objects.all()
 
-# Endpoint para crear un área de personal
+# Endpoint para crear una voceria
 @router.post("/crear", tags=tag, response=VoceriaSchemaIn, auth=JWTAuth())
 def crear_area_personal(request, data: VoceriaSchemaIn):
     voceria = Voceria.objects.create(**data.dict())
