@@ -255,7 +255,7 @@
                             {% if perms|can_view_self %}
                                 <a href="{% jazzy_admin_url request.user request.current_app|default:"admin" %}" class="d-block users">{{ request.user.nombre_apellido }}</a>
                             {% else %}
-                                <span class="d-block" style="color: white;">{{ request.user }}</span>
+                                <span class="d-block" style="color: black;">{{ request.user.nombre_apellido }}</span>
                             {% endif %}
                         </div>
                     </div>

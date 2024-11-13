@@ -14,6 +14,7 @@ class UserManager(BaseUserManager):
                             nombre_apellido = nombre_apellido,
                             )
         user.set_password(password)
+        user.is_staff       = True
         user.save()
         return user
 
@@ -49,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     fecha_actualizacion     = models.DateTimeField('Fecha Actualización',   auto_now     = True                                                 )
     is_verified             = models.BooleanField('VERIFICADO',                                 default = True                             )
     is_active               = models.BooleanField('ACTIVO',                                     default = True                             )
-    is_staff                = models.BooleanField('STAFF',                                      default = False                            )
+    is_staff                = models.BooleanField('STAFF',                                      default = True                            )
     is_superuser            = models.BooleanField('ROOT',                                       default = False                            )
     #historical              = HistoricalRecords()
     objects                 = UserManager()
