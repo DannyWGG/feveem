@@ -10,11 +10,20 @@ class AsistenteAdmin(admin.ModelAdmin):
     
     def eliminar(self, obj):
         return format_html('<a class="btn" href="/admin/feveem/asistente/{}/delete/"><i class="nav-icon fas fa-trash"></i></a>', obj.id)
+    
+    # Sobrescribir el método get_queryset para filtrar por el director
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs  # Superusuario puede ver todos los registros
+        else:
+            # Filtrar por el director asociado al usuario
+            return qs.filter(usuario=request.user)
 
     
-    list_display        =   ('primer_nombre','segundo_nombre','primer_apellido','segundo_apellido', 'editar', 'eliminar')
-    #list_filter         =  ('descripcion',)
-    search_fields       =   ()
+    list_display        =   ('primer_nombre','segundo_nombre','primer_apellido','segundo_apellido','origen','cedula','institucion_educativa', 'editar', 'eliminar')
+    #list_filter         =  ('cedula','cod_plantel')
+    search_fields       =  ('cod_plantel','cedula','institucion_educativa',)
     list_display_links  = None
     actions             = None
 
