@@ -57,10 +57,10 @@ def crear_asistente(request, data: AsistenteSchemaIn):
         return 201, asistente  # Retorna el asistente creado con un código de estado 201
     except ValueError as e:
         logger.error(f"Error de valor: {str(e)}")
-        raise HttpError(400, str(e))  # Retorna un mensaje de error específico
+        raise HttpError(400, "Error inesperado.")  # Retorna un mensaje de error específico
     except Exception as e:
         logger.error(f"Error inesperado al crear asistente: {str(e)}")
-        raise HttpError(500, "Error interno del servidor. Por favor, inténtelo más tarde.")
+        raise HttpError(500, "Esta cédula ya se encuentra registrada.")
 
 #@router.post('/create', tags=tag, response = {201: SucessSchema, 400: ErrorSchema})
 #def create_materia(request, payload: List[AreaPersonalSchema]):
