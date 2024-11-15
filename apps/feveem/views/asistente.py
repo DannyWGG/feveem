@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from ninja                          import Router
 from ninja.errors                   import HttpError
 from apps.feveem.models.asistente   import Asistente
@@ -14,6 +16,19 @@ tag = ['asistentes']
 router = Router()
 
 logger = logging.getLogger(__name__)
+
+@router.get("/contador", tags=tag)
+def contar_asistentes(request):  # Agrega el parámetro request aquí
+    # Contar registros por vocería
+    conteo_voceria = Asistente.objects.values('voceria__descripcion').annotate(total=Count('id'))
+
+    # Contar registros por actividad extra curricular
+    conteo_extra_curricular = Asistente.objects.values('extra_curricular__descripcion').annotate(total=Count('id'))
+
+    return {
+        "voceria": list(conteo_voceria),
+        "extra_curricular": list(conteo_extra_curricular)
+    }
 
 @router.get("/ver", tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())
 def listar_asistentes(request):
