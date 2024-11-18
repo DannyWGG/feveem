@@ -65,3 +65,10 @@ class VoceriaEstadoCountSchema(Schema):
 
 class ContadorResponseSchema(Schema):
     resultados: List[VoceriaEstadoCountSchema]
+
+class RegistroCountSchema(Schema):
+
+    directores_count: int
+    asistente_count: int
+    voceria_count: int
+    extracurricular_count: int
