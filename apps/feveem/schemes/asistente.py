@@ -57,3 +57,11 @@ class AsistenteSchemaOut(Schema):
     extra_curricular: Optional[SubSchemaExtraCurricularSchemaOut]
     identificador: Optional[str]
     usuario_id: int
+
+class VoceriaEstadoCountSchema(Schema):
+    estado: str
+    voceria__descripcion: str
+    total: int
+
+class ContadorResponseSchema(Schema):
+    resultados: List[VoceriaEstadoCountSchema]

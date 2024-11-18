@@ -4,20 +4,21 @@ from ninja                          import Router
 from ninja.errors                   import HttpError
 from apps.feveem.models.asistente   import Asistente
 from typing                         import List
-from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut
+from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut, ContadorResponseSchema
 from configuracion.schemes          import ErrorSchema
 from configuracion.schemes          import SucessSchema
 
 from ninja_jwt.authentication       import JWTAuth
 
 import logging
+from typing import Optional
 
 tag = ['asistentes']
 router = Router()
 
 logger = logging.getLogger(__name__)
 
-@router.get("/contador", tags=tag)
+@router.get("/contador", tags=['Estadisticas'])
 def contar_asistentes(request):  # Agrega el parámetro request aquí
     # Contar registros por vocería
     conteo_voceria = Asistente.objects.values('voceria__descripcion').annotate(total=Count('id'))
@@ -28,6 +29,15 @@ def contar_asistentes(request):  # Agrega el parámetro request aquí
     return {
         "voceria": list(conteo_voceria),
         "extra_curricular": list(conteo_extra_curricular)
+    }
+
+@router.get("/contadorestados", response=ContadorResponseSchema, tags=['Estadisticas'])
+def contar_asistentes_contador(request):
+    # Contar registros agrupados por estado y vocería
+    conteo = Asistente.objects.values('estado', 'voceria__descripcion').annotate(total=Count('id'))
+
+    return {
+        "resultados": list(conteo),
     }
 
 @router.get("/ver", tags=tag, response=List[AsistenteSchemaOut], auth=JWTAuth())
