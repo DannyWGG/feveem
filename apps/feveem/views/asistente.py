@@ -3,8 +3,13 @@ from django.db.models import Count
 from ninja                          import Router
 from ninja.errors                   import HttpError
 from apps.feveem.models.asistente   import Asistente
+
+from apps.cuenta.models import User
+from apps.auxiliares.models.Voceria   import Voceria
+from apps.auxiliares.models.ExtraCurricular   import ActividadExtraCurricular
+
 from typing                         import List
-from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut, ContadorResponseSchema
+from apps.feveem.schemes.asistente  import AsistenteSchemaIn, AsistenteSchemaOut, ContadorResponseSchema, RegistroCountSchema
 from configuracion.schemes          import ErrorSchema
 from configuracion.schemes          import SucessSchema
 
@@ -17,6 +22,24 @@ tag = ['asistentes']
 router = Router()
 
 logger = logging.getLogger(__name__)
+
+
+@router.get("/registrostotales", tags=['Estadisticas'], response=RegistroCountSchema)
+def registrostotales(request):
+    """ Endpoint para contar registros de Asistente, Voceria y Extracurricular """
+    
+    directores_count = User.objects.count()
+
+    asistente_count = Asistente.objects.count()
+    voceria_count = Voceria.objects.count()
+    extracurricular_count = ActividadExtraCurricular.objects.count()
+
+    return {
+        "directores_count": directores_count,
+        "asistente_count": asistente_count,
+        "voceria_count": voceria_count,
+        "extracurricular_count": extracurricular_count,
+    }
 
 @router.get("/contador", tags=['Estadisticas'])
 def contar_asistentes(request):  # Agrega el parámetro request aquí
