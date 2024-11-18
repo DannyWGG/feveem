@@ -30,7 +30,8 @@ LOCAL_APPS  =   [
                     'apps.cuenta',
                     'apps.frontend',
                     'apps.auxiliares',
-                    'apps.feveem'
+                    'apps.feveem',
+                    'apps.reporte'
                 ]
 
 THIRD_APPS =    [
