@@ -29,28 +29,66 @@ def reporte_general(request):
 
     # Encabezados
     encabezados = [
-        "Estado", "Vocería", "Actividad Extra Curricular", "Total"]
+        "Estado", "Contralor", "Integrador", "Activista", "Deportes", "Cultural", "Científico"]
     
-    fila_inicial = 6
+    fila_inicial = 7
     for col_index, encabezado in enumerate(encabezados, start=1):  # Comienza en columna A (1)
         hoja.cell(row=fila_inicial, column=col_index, value=encabezado)
 
-    # Agregar los datos al Excel (a partir de la fila siguiente)
-    fila_inicial += 1  # Los datos comienzan en la fila 7
-    datos = (
-        Asistente.objects
-        .values('estado', 'voceria__descripcion', 'extra_curricular__descripcion')  # Agrupar por estado, vocería y actividad
-        .annotate(total_solicitantes=Count('id'))  # Contar solicitantes
-        .order_by('estado', 'voceria__descripcion')
-    )
-    # Agregar los datos al Excel
-    for dato in datos:
-        total_solicitudes = Asistente.objects.filter(estado=dato['estado']).count()
-        hoja.cell(row=fila_inicial, column=1, value=dato['estado'])
-        hoja.cell(row=fila_inicial, column=2, value=dato['voceria__descripcion'])
-        hoja.cell(row=fila_inicial, column=3, value=dato['extra_curricular__descripcion'])
-        hoja.cell(row=fila_inicial, column=4, value=total_solicitudes)
-        fila_inicial += 1  # Avanzar a la siguiente fila
+    estados= [
+    "Amazonas",
+    "Anzoátegui",
+    "Apure",
+    "Aragua",
+    "Barinas",
+    "Bolívar",
+    "Carabobo",
+    "Cojedes",
+    "Delta Amacuro",
+    "Distrito Capital",
+    "Falcón",
+    "Guárico",
+    "Lara",
+    "Mérida",
+    "Miranda",
+    "Monagas",
+    "Nueva Esparta",
+    "Portuguesa",
+    "Sucre",
+    "Táchira",
+    "Trujillo",
+    "La Guaira",
+    "Yaracuy",
+    "Zulia"
+]
+
+
+    for i in range(24):
+        hoja.cell(row=i+8, column=1, value=estados[i])
+
+    datos_contralor = []
+    datos_integrador = []
+    datos_activista = []
+
+    contralor  = Asistente.objects.filter(vocero= 'CONTROLADOR')
+
+
+    # # Agregar los datos al Excel (a partir de la fila siguiente)
+    # fila_inicial = 8  # Los datos comienzan en la fila 7
+    # datos = (
+    #     Asistente.objects
+    #     .values('estado', 'voceria__descripcion', 'extra_curricular__descripcion')  # Agrupar por estado, vocería y actividad
+    #     .annotate(total_solicitantes=Count('id'))  # Contar solicitantes
+    #     .order_by('estado', 'voceria__descripcion')
+    # )
+    # # Agregar los datos al Excel
+    # for dato in datos:
+    #     total_solicitudes = Asistente.objects.filter(estado=dato['estado']).count()
+    #     hoja.cell(row=fila_inicial, column=1, value=dato['estado'])
+    #     hoja.cell(row=fila_inicial, column=2, value=dato['voceria__descripcion'])
+    #     hoja.cell(row=fila_inicial, column=3, value=dato['extra_curricular__descripcion'])
+    #     hoja.cell(row=fila_inicial, column=4, value=total_solicitudes)
+    #     fila_inicial += 1  # Avanzar a la siguiente fila
 
     # Ajustar el ancho de columnas para que el contenido sea visible
     for col in hoja.columns:
