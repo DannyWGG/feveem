@@ -2,7 +2,7 @@ from ninja import Router
 from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
-from openpyxl.chart import BarChart, Reference
+from openpyxl.chart import PieChart, Reference
 from io import BytesIO
 from django.http import HttpResponse
 from django.db.models import Count
@@ -35,60 +35,83 @@ def reporte_general(request):
     for col_index, encabezado in enumerate(encabezados, start=1):  # Comienza en columna A (1)
         hoja.cell(row=fila_inicial, column=col_index, value=encabezado)
 
-    estados= [
-    "Amazonas",
-    "Anzoátegui",
-    "Apure",
-    "Aragua",
-    "Barinas",
-    "Bolívar",
-    "Carabobo",
-    "Cojedes",
-    "Delta Amacuro",
-    "Distrito Capital",
-    "Falcón",
-    "Guárico",
-    "Lara",
-    "Mérida",
-    "Miranda",
-    "Monagas",
-    "Nueva Esparta",
-    "Portuguesa",
-    "Sucre",
-    "Táchira",
-    "Trujillo",
-    "La Guaira",
-    "Yaracuy",
-    "Zulia"
-]
+    estados = [
+        "AMAZONAS", "ANZOATEGUI", "APURE", "ARAGUA", "BARINAS", "BOLIVAR", "CARABOBO",
+        "COJEDES", "DELTA AMACURO", "DISTRITO CAPITAL", "FALCON", "GUÁRICO", "LARA",
+        "MERIDA", "MIRANDA", "MONAGAS", "NUEVA ESPARTA", "PORTUGUESA", "SUCRE",
+        "TÁCHIRA", "TRUJILLO", "LA GUAIRA", "YARACUY", "ZULIA"
+    ]
+
+    # Contar asistentes con vocería de tipo "contralor" por estado
+    conteo_contralor = (
+        Asistente.objects.filter(voceria__descripcion="CONTROLADOR")
+        .values("estado")
+        .annotate(total=Count("id"))
+    )
+
+     # Crear un diccionario para mapear los conteos por estado
+    conteo_por_estado = {estado["estado"]: estado["total"] for estado in conteo_contralor}
+
+    # Contar asistentes con vocería de tipo "integrador" por estado
+    conteo_integrador = (
+        Asistente.objects.filter(voceria__descripcion="INTEGRADOR")
+        .values("estado")
+        .annotate(total=Count("id"))
+    )
+
+     # Crear un diccionario para mapear los conteos por estado
+    conteo_por_estado_int = {estado["estado"]: estado["total"] for estado in conteo_integrador}
+
+    # Contar asistentes con vocería de tipo "activista" por estado
+    conteo_activista = (
+        Asistente.objects.filter(voceria__descripcion="ACTIVISTA")
+        .values("estado")
+        .annotate(total=Count("id"))
+    )
+
+     # Crear un diccionario para mapear los conteos por estado
+    conteo_por_estado_act = {estado["estado"]: estado["total"] for estado in conteo_activista}
+
+    # Contar asistentes con actividaes extracurricular de tipo "deportes" por estado
+    conteo_deportes = (
+        Asistente.objects.filter(extra_curricular__descripcion="DEPORTES")
+        .values("estado")
+        .annotate(total=Count("id"))
+    )
+
+     # Crear un diccionario para mapear los conteos por estado
+    conteo_por_estado_dep = {estado["estado"]: estado["total"] for estado in conteo_deportes}
+
+    # Contar asistentes con actividaes extracurricular de tipo "cultural" por estado
+    conteo_cultural = (
+        Asistente.objects.filter(extra_curricular__descripcion="CULTURAL")
+        .values("estado")
+        .annotate(total=Count("id"))
+    )
+
+     # Crear un diccionario para mapear los conteos por estado
+    conteo_por_estado_cul = {estado["estado"]: estado["total"] for estado in conteo_cultural}
+
+    # Contar asistentes con actividaes extracurricular de tipo "Cientifico" por estado
+    conteo_cientifico = (
+        Asistente.objects.filter(extra_curricular__descripcion="CIENTÍFICO")
+        .values("estado")
+        .annotate(total=Count("id"))
+    )
+
+     # Crear un diccionario para mapear los conteos por estado
+    conteo_por_estado_cien = {estado["estado"]: estado["total"] for estado in conteo_cientifico}
 
 
-    for i in range(24):
-        hoja.cell(row=i+8, column=1, value=estados[i])
-
-    datos_contralor = []
-    datos_integrador = []
-    datos_activista = []
-
-    contralor  = Asistente.objects.filter(vocero= 'CONTROLADOR')
-
-
-    # # Agregar los datos al Excel (a partir de la fila siguiente)
-    # fila_inicial = 8  # Los datos comienzan en la fila 7
-    # datos = (
-    #     Asistente.objects
-    #     .values('estado', 'voceria__descripcion', 'extra_curricular__descripcion')  # Agrupar por estado, vocería y actividad
-    #     .annotate(total_solicitantes=Count('id'))  # Contar solicitantes
-    #     .order_by('estado', 'voceria__descripcion')
-    # )
-    # # Agregar los datos al Excel
-    # for dato in datos:
-    #     total_solicitudes = Asistente.objects.filter(estado=dato['estado']).count()
-    #     hoja.cell(row=fila_inicial, column=1, value=dato['estado'])
-    #     hoja.cell(row=fila_inicial, column=2, value=dato['voceria__descripcion'])
-    #     hoja.cell(row=fila_inicial, column=3, value=dato['extra_curricular__descripcion'])
-    #     hoja.cell(row=fila_inicial, column=4, value=total_solicitudes)
-    #     fila_inicial += 1  # Avanzar a la siguiente fila
+    # Insertar los estados y conteos en la hoja de Excel
+    for i, estado in enumerate(estados):
+        hoja.cell(row=i + 8, column=1, value=estado)  # Nombre del estado
+        hoja.cell(row=i + 8, column=2, value=conteo_por_estado.get(estado, 0)) # Conteo de "contralor"
+        hoja.cell(row=i + 8, column=3, value=conteo_por_estado_int.get(estado, 0))  # Conteo de "integrador"
+        hoja.cell(row=i + 8, column=4, value=conteo_por_estado_act.get(estado, 0))  # Conteo de "activista"
+        hoja.cell(row=i + 8, column=5, value=conteo_por_estado_dep.get(estado, 0))  # Conteo de "deporte"
+        hoja.cell(row=i + 8, column=6, value=conteo_por_estado_cul.get(estado, 0))  # Conteo de "activista"
+        hoja.cell(row=i + 8, column=7, value=conteo_por_estado_cien.get(estado, 0))  # Conteo de "activista"
 
     # Ajustar el ancho de columnas para que el contenido sea visible
     for col in hoja.columns:
@@ -101,44 +124,27 @@ def reporte_general(request):
                 pass
         hoja.column_dimensions[col_letter].width = max_length + 2
 
-    # Crear gráficos
-    grafico_fila_inicio = 6  # Donde se ubicarán los gráficos
-    ultima_fila_datos = fila_inicial - 1
+    # Crear una nueva hoja para gráficos
+    hoja_graficos = wb.create_sheet(title="Gráficos")
 
-    # Gráfico 1: Voceros Contralor por Estado
-    contralor_chart = BarChart()
-    contralor_chart.title = "Voceros Contralor por Estado"
-    contralor_chart.x_axis.title = "Estado"
-    contralor_chart.y_axis.title = "Cantidad"
-    datos_contralor = Reference(hoja, min_col=5, min_row=7, max_row=ultima_fila_datos)  # Columna Voceros Contralor
-    estados = Reference(hoja, min_col=1, min_row=7, max_row=ultima_fila_datos)  # Columna Estados
-    contralor_chart.add_data(datos_contralor, titles_from_data=False)
-    contralor_chart.set_categories(estados)
-    hoja.add_chart(contralor_chart, f"F{grafico_fila_inicio}")
-
-    # Gráfico 2: Voceros Integrador por Estado
-    integrador_chart = BarChart()
-    integrador_chart.title = "Voceros Integrador por Estado"
-    integrador_chart.x_axis.title = "Estado"
-    integrador_chart.y_axis.title = "Cantidad"
-    datos_integrador = Reference(hoja, min_col=6, min_row=7, max_row=ultima_fila_datos)  # Columna Voceros Integrador
-    integrador_chart.add_data(datos_integrador, titles_from_data=False)
-    integrador_chart.set_categories(estados)
-    hoja.add_chart(integrador_chart, f"F{grafico_fila_inicio + 15}")  # Ajusta la posición vertical del gráfico
-
-    # Gráfico 3: Voceros Activista por Estado
-    activista_chart = BarChart()
-    activista_chart.title = "Voceros Activista por Estado"
-    activista_chart.x_axis.title = "Estado"
-    activista_chart.y_axis.title = "Cantidad"
-    datos_activista = Reference(hoja, min_col=7, min_row=7, max_row=ultima_fila_datos)  # Columna Voceros Activista
-    activista_chart.add_data(datos_activista, titles_from_data=False)
-    activista_chart.set_categories(estados)
-    hoja.add_chart(activista_chart, f"F{grafico_fila_inicio + 30}") 
-
-
-
-
+    # Insertar gráfico por vocerías
+    for idx, (voceria, col) in enumerate(zip(
+        ["Contralor", "Integrador", "Activista", "Deportes", "Cultural", "Científico"], 
+        range(2, 8)
+    )):
+        # Crear el gráfico
+        chart = PieChart()
+        chart.title = f"Vocería: {voceria}"
+        
+        # Definir los datos
+        datos = Reference(hoja, min_col=col, min_row=7, max_row=7 + len(estados))
+        etiquetas = Reference(hoja, min_col=1, min_row=8, max_row=8 + len(estados) - 1)
+        
+        chart.add_data(datos, titles_from_data=False)
+        chart.set_categories(etiquetas)
+        
+        # Colocar el gráfico en la hoja
+        hoja_graficos.add_chart(chart, f"A{idx * 15 + 1}")
     
     # Guardar el archivo en memoria
     """ buffer = BytesIO()
