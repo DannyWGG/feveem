@@ -1,8 +1,11 @@
 from ninja import Router
 from datetime import datetime
+
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from openpyxl.chart import PieChart, Reference
+from openpyxl.styles import Alignment
+
 from io import BytesIO
 from django.http import HttpResponse
 from django.db.models import Count
@@ -26,6 +29,15 @@ def reporte_general(request):
         hoja.add_image(logo, "A1")
     except FileNotFoundError:
         pass  # Si la imagen no existe, continuar sin ella
+    
+    hoja['B6']= "Voceros"
+    hoja['E6']= "Extracurriculares"
+
+    hoja['E6'].alignment = Alignment(horizontal='center', vertical='center')
+    hoja['B6'].alignment = Alignment(horizontal='center', vertical='center')
+
+    hoja.merge_cells('B6:D6')
+    hoja.merge_cells('E6:G6')
 
     # Encabezados
     encabezados = [
@@ -115,14 +127,9 @@ def reporte_general(request):
 
     # Ajustar el ancho de columnas para que el contenido sea visible
     for col in hoja.columns:
-        max_length = 0
         col_letter = col[0].column_letter  # Letra de la columna
-        for cell in col:
-            try:
-                max_length = max(max_length, len(str(cell.value)))
-            except:
-                pass
-        hoja.column_dimensions[col_letter].width = max_length + 2
+        hoja.column_dimensions[col_letter].width = 15  # Ancho fijo
+
 
     # Crear una nueva hoja para gráficos
     hoja_graficos = wb.create_sheet(title="Gráficos")
