@@ -4,12 +4,13 @@ from apps.cuenta.views.token                import MyTokenObtainPairController, 
 from ninja.errors                           import ValidationError as NinjaValidationError
 from datetime                               import datetime
 
-from apps.cuenta.views.token                    import router as token_router
+from apps.cuenta.views.token                import router as token_router
 
-from apps.feveem.views.asistente                import router as asistente
-from apps.auxiliares.views.Voceria              import router as Voceria
-from apps.auxiliares.views.ExtraCurricular      import router as ExtraCurricular
-from apps.auxiliares.views.plantel              import router as Plantel
+from apps.feveem.views.asistente            import router as asistente
+from apps.auxiliares.views.Voceria          import router as Voceria
+from apps.auxiliares.views.ExtraCurricular  import router as ExtraCurricular
+from apps.auxiliares.views.plantel          import router as Plantel
+from apps.reporte.views.general             import router as general_reporte
 
 
 api = NinjaExtraAPI(
@@ -25,6 +26,7 @@ api.add_router("/asistente/", asistente)
 api.add_router("/voceria/", Voceria)
 api.add_router("/extracurricular/", ExtraCurricular)
 api.add_router("/directores/", Plantel)
+api.add_router("/reportes/", general_reporte)
 
 api.register_controllers(ResetPasswordController)
 api.register_controllers(MyTokenObtainPairController)
